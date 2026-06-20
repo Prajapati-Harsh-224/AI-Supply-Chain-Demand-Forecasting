@@ -1,0 +1,1 @@
+["product_id", "store_id_enc", "dayofweek", "month", "day", "weekofyear", "is_weekend", "promo_flag", "price", "lag_1", "lag_7", "lag_14", "rolling_mean_7", "rolling_mean_14"]

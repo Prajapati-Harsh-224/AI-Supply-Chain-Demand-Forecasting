@@ -1,0 +1,200 @@
+{% extends "ownerpanel/base_owner.html" %}
+{% block title %}Profile • Owner{% endblock %}
+{% block page_title %}Profile{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-4">
+  <div>
+    <h3 class="fw-bold mb-0">Profile</h3>
+    <div class="text-muted">Manage your account settings and store activity information.</div>
+  </div>
+</div>
+
+<div class="row g-4 align-items-stretch">
+  <!-- Left Profile Card -->
+  <div class="col-lg-4">
+    <div class="card-soft p-4 text-center h-100 d-flex flex-column">
+      <div class="mb-3">
+        {% if profile_obj.profile_photo %}
+          <img
+            src="{{ profile_obj.profile_photo.url }}"
+            class="rounded-circle border shadow-sm"
+            width="110"
+            height="110"
+            style="object-fit: cover;"
+          >
+        {% else %}
+          <div
+            class="rounded-circle bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center border shadow-sm"
+            style="width:110px;height:110px;font-size:36px;font-weight:700;"
+          >
+            {{ request.user.first_name|default:request.user.username|slice:":1"|upper }}
+          </div>
+        {% endif %}
+      </div>
+
+      <h5 class="fw-bold mb-1">{{ request.user.get_full_name|default:request.user.username }}</h5>
+
+      
+
+      <div class="small text-muted mb-3">
+        {% if profile_obj.store %}
+          {{ profile_obj.store.name }}
+        {% else %}
+          No store linked
+        {% endif %}
+      </div>
+
+      <div class="text-start border-top pt-3 mt-3">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Full Name</span>
+          <span class="fw-semibold">{{ request.user.get_full_name|default:request.user.username }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Email Address</span>
+          <span class="fw-semibold">{{ request.user.email }}</span>
+        </div>
+
+        
+
+        <div class="d-flex justify-content-between">
+          <span class="text-muted">Member Since</span>
+          <span class="fw-semibold">{{ request.user.date_joined|date:"d M Y" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Tabs -->
+  <div class="col-lg-8">
+    <div class="card-soft p-4 h-100 d-flex flex-column">
+      <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#settings" type="button">
+            Account Settings
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#stats" type="button">
+            Store Statistics
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content flex-grow-1">
+        <!-- Settings -->
+        <div class="tab-pane fade show active" id="settings">
+          <h6 class="fw-bold mb-3">Change Password</h6>
+
+          <form method="post" action="{% url 'ownerpanel:change_password' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">Current Password</label>
+                {{ password_form.old_password }}
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">New Password</label>
+                {{ password_form.new_password1 }}
+                <div class="progress mt-2" style="height:6px;">
+                  <div id="passwordStrengthBar" class="progress-bar" role="progressbar" style="width:0%;"></div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Confirm Password</label>
+                {{ password_form.new_password2 }}
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <button type="submit" class="btn btn-warning">Change Password</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Stats -->
+        <div class="tab-pane fade" id="stats">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="border rounded-4 p-3 bg-light-subtle h-100">
+                <div class="small text-muted">Total Products Managed</div>
+                <div class="fw-bold fs-4">{{ store_stats.total_products }}</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="border rounded-4 p-3 bg-light-subtle h-100">
+                <div class="small text-muted">Forecasts Generated</div>
+                <div class="fw-bold fs-4">{{ store_stats.total_forecasts }}</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="border rounded-4 p-3 bg-light-subtle h-100">
+                <div class="small text-muted">Reports Downloaded</div>
+                <div class="fw-bold fs-4">{{ store_stats.total_reports }}</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="border rounded-4 p-3 bg-light-subtle h-100">
+                <div class="small text-muted">Data Uploads</div>
+                <div class="fw-bold fs-4">{{ store_stats.total_uploads }}</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="border rounded-4 p-3 bg-light-subtle h-100">
+                <div class="small text-muted">Account Status</div>
+                <div class="fw-bold fs-5">
+                  <span class="badge bg-success-subtle text-success">{{ store_stats.account_status }}</span>
+                </div>
+              </div>
+            </div>
+
+            
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const passwordInput = document.getElementById("id_new_password1");
+  const bar = document.getElementById("passwordStrengthBar");
+
+  if (passwordInput && bar) {
+    passwordInput.addEventListener("input", function () {
+      const val = passwordInput.value;
+      let score = 0;
+
+      if (val.length >= 8) score += 25;
+      if (/[A-Z]/.test(val)) score += 25;
+      if (/[0-9]/.test(val)) score += 25;
+      if (/[^A-Za-z0-9]/.test(val)) score += 25;
+
+      bar.style.width = score + "%";
+
+      if (score <= 25) {
+        bar.className = "progress-bar bg-danger";
+      } else if (score <= 50) {
+        bar.className = "progress-bar bg-warning";
+      } else if (score <= 75) {
+        bar.className = "progress-bar bg-info";
+      } else {
+        bar.className = "progress-bar bg-success";
+      }
+    });
+  }
+</script>
+{% endblock %}

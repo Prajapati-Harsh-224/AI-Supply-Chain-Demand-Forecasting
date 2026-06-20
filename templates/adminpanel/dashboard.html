@@ -1,0 +1,248 @@
+{% extends "adminpanel/base_admin.html" %}
+{% block title %}Dashboard • Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h3 class="fw-bold mb-0">Welcome back, {{ request.user.username }}</h3>
+    <div class="text-muted">AI-driven insights into your supply chain.</div>
+  </div>
+</div>
+
+<!-- KPI cards -->
+<div class="row g-3">
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">Total Stores</div>
+        <div class="kpi-icon"><i class="bi bi-shop"></i></div>
+      </div>
+      <div class="kpi-value">{{ total_stores }}</div>
+      <div class="kpi-sub">Across the organization</div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">Active Alerts</div>
+        <div class="kpi-icon" style="background:rgba(245,158,11,.10);color:#b54708;">
+          <i class="bi bi-bell"></i>
+        </div>
+      </div>
+      <div class="kpi-value">{{ alerts }}</div>
+      <div class="kpi-sub">Needs attention</div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">Total Products</div>
+        <div class="kpi-icon" style="background:rgba(16,185,129,.10);color:#027a48;">
+          <i class="bi bi-box"></i>
+        </div>
+      </div>
+      <div class="kpi-value">{{ total_products }}</div>
+      <div class="kpi-sub">Tracked items</div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">System Accuracy Rate</div>
+        <div class="kpi-icon" style="background:rgba(124,58,237,.10);color:#7c3aed;">
+          <i class="bi bi-percent"></i>
+        </div>
+      </div>
+      <div class="kpi-value">{{ accuracy }}%</div>
+      <div class="kpi-sub">Forecast accuracy</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN SECTION -->
+<div class="row g-3 mt-1">
+
+  <!--  LEFT: MODEL CONFIDENCE TREND -->
+<div class="col-lg-8">
+  <div class="card-soft p-4">
+
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Model Confidence Trend</div>
+      <span class="badge-soft">Store-wise Confidence</span>
+    </div>
+
+   
+
+    <div style="height:260px;">
+      <canvas id="confidenceChart"></canvas>
+    </div>
+
+  </div>
+</div>
+
+  <!--  RIGHT: INVENTORY PIE -->
+  <div class="col-lg-4">
+    <div class="card-soft p-4 h-100">
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="fw-bold">Inventory Health</div>
+        <span class="badge-soft">All Stores</span>
+      </div>
+
+      
+
+      <div class="d-flex justify-content-center align-items-center" style="height:220px;">
+        <canvas id="inventoryChart"></canvas>
+      </div>
+
+      <div class="mt-3 small">
+        <div class="d-flex justify-content-between">
+          <span>Healthy</span>
+          <span>{{ healthy_pct }}%</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span>Low Stock</span>
+          <span>{{ low_pct }}%</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span>Overstock</span>
+          <span>{{ over_pct }}%</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const inventoryData = JSON.parse('{{ inventory_data|escapejs }}');
+
+    new Chart(document.getElementById('inventoryChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Healthy', 'Low', 'Over'],
+            datasets: [{
+                data: inventoryData,
+                backgroundColor: [
+                    '#10b981',
+                    '#ef4444',
+                    '#f59e0b'
+                ]
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false }
+            },
+            cutout: '70%'
+        }
+    });
+
+
+
+// -----------------------------
+    //  MODEL CONFIDENCE TREND 
+    // -----------------------------
+const labels = JSON.parse('{{ store_conf_labels|escapejs }}');
+const data = JSON.parse('{{ store_conf_values|escapejs }}');
+
+const ctx = document.getElementById('confidenceChart').getContext('2d');
+
+//  Gradient (professional look)
+const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+gradient.addColorStop(0, "#6366F1");
+gradient.addColorStop(1, "#3B82F6");
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Confidence %",
+            data: data,
+
+            
+            backgroundColor: gradient,
+            borderRadius: 0,          // small professional curve (not too round)
+            borderSkipped: false,
+            barThickness: 36,
+            maxBarThickness: 42
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: { display: false },
+
+            //  modern tooltip
+            tooltip: {
+                backgroundColor: "#111827",
+                titleColor: "#ffffff",
+                bodyColor: "#d1d5db",
+                padding: 10,
+                cornerRadius: 6,
+                displayColors: false,
+                callbacks: {
+                    label: function(context) {
+                        return `Confidence: ${context.raw}%`;
+                    }
+                }
+            }
+        },
+
+        scales: {
+            x: {
+                grid: {
+                    display: false   
+                },
+                ticks: {
+                    color: "#6b7280",
+                    font: {
+                        size: 12,
+                        weight: "500"
+                    }
+                }
+            },
+            y: {
+                min: 0,
+                max: 100,
+
+                grid: {
+                    color: "rgba(0,0,0,0.05)", 
+                    drawBorder: false
+                },
+
+                ticks: {
+                    color: "#9ca3af",
+                    stepSize: 20,
+                    callback: (value) => value + "%"
+                }
+            }
+        },
+
+        //  smooth animation
+        animation: {
+            duration: 800,
+            easing: "easeOutQuart"
+        }
+    }
+});
+});
+
+
+</script>
+
+{% endblock %}

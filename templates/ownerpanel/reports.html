@@ -1,0 +1,91 @@
+{% extends "ownerpanel/base_owner.html" %}
+{% block title %}Reports • Owner{% endblock %}
+{% block page_title %}Reports{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-4">
+  <div>
+    <h3 class="fw-bold mb-0">Reports</h3>
+    <div class="text-muted">
+      Generate comprehensive monthly reports to analyze forecast performance and current inventory status.
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Store Forecast Report -->
+  <div class="col-lg-6">
+    <div class="card-soft p-4 h-100">
+      <div class="d-flex align-items-start justify-content-between mb-3">
+        <div>
+          <h5 class="fw-bold mb-1">Store Forecast Report</h5>
+          <div class="text-muted small">
+            Monthly forecast analysis including product-wise demand predictions and overall forecast performance.          </div>
+        </div>
+        <div class="icon-chip bg-primary-subtle text-primary">
+          <i class="bi bi-graph-up-arrow"></i>
+        </div>
+      </div>
+
+      <div class="small text-muted mb-3">
+        Includes aggregated forecast data for the current month with product-level demand insights and forecast coverage.
+      </div>
+
+      <a href="{% url 'ownerpanel:download_store_performance' %}"
+         class="btn btn-primary btn-pill download-btn">
+        <i class="bi bi-download me-1"></i> Download PDF
+      </a>
+    </div>
+  </div>
+
+  <!-- Inventory Report -->
+  <div class="col-lg-6">
+    <div class="card-soft p-4 h-100">
+      <div class="d-flex align-items-start justify-content-between mb-3">
+        <div>
+          <h5 class="fw-bold mb-1">Inventory Report</h5>
+          <div class="text-muted small">
+            Overview of current stock levels with reorder thresholds and inventory health status.
+          </div>
+        </div>
+        <div class="icon-chip bg-success-subtle text-success">
+          <i class="bi bi-box-seam"></i>
+        </div>
+      </div>
+
+      <div class="small text-muted mb-3">
+        Includes SKU-level stock data with reorder points, safety stock levels, and inventory status evaluation.
+      </div>
+
+      <a href="{% url 'ownerpanel:download_inventory' %}"
+         class="btn btn-primary btn-pill download-btn">
+        <i class="bi bi-download me-1"></i> Download PDF
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Loading Spinner -->
+<div id="downloadOverlay" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,.75); z-index:2000;">
+  <div class="d-flex flex-column align-items-center justify-content-center h-100">
+    <div class="spinner-border text-primary mb-3" role="status"></div>
+    <div class="fw-semibold">Generating report...</div>
+    <div class="small text-muted">Please wait a moment</div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.querySelectorAll(".download-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      document.getElementById("downloadOverlay").style.display = "block";
+      setTimeout(function() {
+        document.getElementById("downloadOverlay").style.display = "none";
+      }, 4000);
+    });
+  });
+</script>
+{% endblock %}

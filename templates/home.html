@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}DemandIQ | AI Demand Forecasting{% endblock %}
+
+{% block content %}
+
+<!-- TOP GRADIENT WRAPPER (Hero + part of Features like reference) -->
+<section class="top-gradient">
+
+  <!-- HERO -->
+  <div class="container py-5">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+       
+
+        <h1 class="display-5 fw-bold mt-3 mb-2">
+          Forecast demand. <span class="text-gradient">Plan inventory smarter.</span>
+        </h1>
+
+        <p class="lead text-muted mt-3">
+          DemandIQ enables businesses to forecast short-term product demand 
+          and improve inventory planning using data-driven predictive analytics.
+        </p>
+
+        <div class="mt-4 d-flex gap-3 flex-wrap">
+          
+  <a href="{% url 'register' %}" class="btn-cta-primary">
+    Get Started
+  </a>
+
+  <a href="{% url 'login' %}"  class="btn-cta-secondary">
+    Login
+  </a>
+
+</div>
+
+        <div class="row g-3 mt-4">
+
+  <div class="col-md-4">
+    <div class="hero-info-card p-3">
+      <div class="fw-semibold">Forecast Horizon</div>
+      
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="hero-info-card p-3">
+      <div class="fw-semibold">Smart Preprocessing</div>
+     
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="hero-info-card p-3">
+      <div class="fw-semibold">Optimized Stock</div>
+      
+    </div>
+  </div>
+
+</div>
+</div>
+
+      <!-- Optional right placeholder (keep empty for clean look) -->
+      <div class="col-lg-5 d-none d-lg-block">
+        <!-- You can add a small illustration later (optional) -->
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES (still inside gradient like reference) -->
+  <div class="container pb-5" id="features">
+  <div class="row align-items-end mb-4">
+    <div class="col-lg-7">
+      <h2 class="fw-bold mb-1">Key features</h2>
+      <p class="text-muted mb-0">
+        Professional features that match real-world supply chain systems.
+      </p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Card 1 -->
+    <div class="col-md-4">
+      <div class="feature-card h-100 p-4 text-center">
+        <div class="feature-icon mx-auto">
+          <i class="bi bi-graph-up"></i>
+        </div>
+        <h5 class="fw-bold mt-3">Demand forecasting</h5>
+        <p class="text-muted small mb-0">
+          Forecast demand for next 7/14/30 days using time-series techniques.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-4">
+      <div class="feature-card h-100 p-4 text-center">
+        <div class="feature-icon mx-auto">
+          <i class="bi bi-funnel"></i>
+        </div>
+        <h5 class="fw-bold mt-3">Data cleaning & validation</h5>
+        <p class="text-muted small mb-0">
+          Handle missing values, outliers, and invalid date formats before forecasting.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4">
+      <div class="feature-card h-100 p-4 text-center">
+        <div class="feature-icon mx-auto">
+          <i class="bi bi-box-seam"></i>
+        </div>
+        <h5 class="fw-bold mt-3">Inventory recommendations</h5>
+        <p class="text-muted small mb-0">
+          Suggest reorder points and safety stock using predicted demand and lead time.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="col-md-4">
+      <div class="feature-card h-100 p-4 text-center">
+        <div class="feature-icon mx-auto">
+          <i class="bi bi-bar-chart"></i>
+        </div>
+        <h5 class="fw-bold mt-3">Dashboards & insights</h5>
+        <p class="text-muted small mb-0">
+          Trends, seasonality, and demand patterns visualized in charts and tables.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="col-md-4">
+      <div class="feature-card h-100 p-4 text-center">
+        <div class="feature-icon mx-auto">
+          <i class="bi bi-person-check"></i>
+        </div>
+        <h5 class="fw-bold mt-3">Access control</h5>
+        <p class="text-muted small mb-0">
+          Two roles: <b>Owner</b> and <b>Admin</b> for secure and structured access.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="col-md-4">
+      <div class="feature-card h-100 p-4 text-center">
+        <div class="feature-icon mx-auto">
+          <i class="bi bi-download"></i>
+        </div>
+        <h5 class="fw-bold mt-3">Export reports</h5>
+        <p class="text-muted small mb-0">
+          Download forecasting summaries and inventory reports in CSV or PDF format.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ABOUT  -->
+<section class="section-alt py-5" id="about">
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">About DemandIQ</h2>
+      <p class="text-muted mx-auto" style="max-width: 720px;">
+        DemandIQ is an AI-based demand forecasting system developed to integrate
+        data preprocessing, predictive modeling, and inventory optimization
+        within a structured supply chain decision-support platform.
+      </p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Column 1 -->
+      <div class="col-md-4">
+        <div class="about-pillars text-center p-4 h-100">
+          <div class="about-icon mb-3">
+            <i class="bi bi-database"></i>
+          </div>
+          <h6 class="fw-semibold">Data Engineering</h6>
+          <p class="text-muted small mb-0">
+            We transform raw, messy datasets into structured assets using a 
+            rigorous pipeline of preprocessing, outlier detection, and validation.
+          </p>
+        </div>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="col-md-4">
+        <div class="about-pillars text-center p-4 h-100">
+          <div class="about-icon mb-3">
+            <i class="bi bi-graph-up"></i>
+          </div>
+          <h6 class="fw-semibold">Forecasting Intelligence</h6>
+          <p class="text-muted small mb-0">
+            Utilizing advanced predictive modeling, 
+            the system identifies seasonal trends and demand patterns across multiple time horizons.
+          </p>
+        </div>
+      </div>
+
+      <!-- Column 3 -->
+      <div class="col-md-4">
+        <div class="about-pillars text-center p-4 h-100">
+          <div class="about-icon mb-3">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <h6 class="fw-semibold">Inventory Optimization</h6>
+          <p class="text-muted small mb-0">
+             By translating forecasts into precise safety stock levels
+             and reorder points, we help businesses eliminate stock-outs and reduce capital tied up in overstock.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+{% endblock %}

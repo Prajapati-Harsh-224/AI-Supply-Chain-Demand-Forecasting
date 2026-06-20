@@ -1,0 +1,457 @@
+/* =========================================================
+   1. ROOT VARIABLES / DESIGN TOKENS
+   ========================================================= */
+:root {
+  /* Brand */
+  --blue: #2563eb;
+  --purple: #7c3aed;
+
+  /* Surface / Text */
+  --bg: #f6f8fc;
+  --text: #0f172a;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --border: rgba(15, 23, 42, 0.08);
+
+  /* Semantic */
+  --primary: #2563eb;
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* Layout */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 92px;
+  --topbar-height: 70px;
+
+  /* Radius / Shadow */
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   2. GLOBAL RESET / BASE
+   ========================================================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   3. MAIN APP LAYOUT
+   ========================================================= */
+.layout {
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   4. SIDEBAR  — fixed, light, professional
+   ========================================================= */
+#sidebar,
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  padding: 18px 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.25s ease, transform 0.25s ease;
+  will-change: transform, width;
+  z-index: 1040;
+
+  /* light sidebar matching owner panel */
+  background: linear-gradient(180deg, #f8fbff 0%, #f4f7ff 100%);
+  border-right: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.70);
+}
+
+/* cleaner scrollbar */
+#sidebar::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+#sidebar::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.14);
+  border-radius: 999px;
+}
+
+
+/* =========================================================
+   5. MAIN RIGHT PANEL
+   ========================================================= */
+.main {
+  margin-left: var(--sidebar-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  transition: margin-left 0.25s ease;
+}
+
+
+/* =========================================================
+   6. TOPBAR — sticky inside right panel
+   ========================================================= */
+.topbar {
+  height: var(--topbar-height);
+  min-height: var(--topbar-height);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  flex-shrink: 0;
+}
+
+.crumb {
+  font-weight: 600;
+  color: #334155;
+  font-size: 14px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* =========================================================
+   7. PAGE CONTENT — only this scrolls
+   ========================================================= */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 22px;
+}
+
+
+/* =========================================================
+   8. BRAND AREA
+   ========================================================= */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 16px 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.brand-title {
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.brand-sub {
+  color: #64748b;
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   9. ADMIN / ROLE BLOCK
+   ========================================================= */
+.org {
+  margin: 10px 8px 14px 8px;
+  padding: 12px 12px;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  background: transparent;
+}
+
+.org .small {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b !important;
+}
+
+.org .org-name {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   10. SIDEBAR NAVIGATION
+   ========================================================= */
+.sidebar .nav,
+#sidebar .nav {
+  gap: 4px;
+}
+
+.sidebar .nav-link,
+#sidebar .nav-link {
+  margin: 4px 8px;
+  padding: 12px 12px;
+  border-radius: 18px;
+  font-weight: 650;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sidebar .nav-link i,
+#sidebar .nav-link i {
+  font-size: 18px;
+  min-width: 18px;
+}
+
+.sidebar .nav-link:hover,
+#sidebar .nav-link:hover {
+  background: rgba(37, 99, 235, 0.06);
+  color: #0f172a;
+}
+
+.sidebar .nav-link.active,
+#sidebar .nav-link.active {
+  background: rgba(37, 99, 235, 0.10);
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.06);
+  color: #1d4ed8;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: rgba(15, 23, 42, 0.08);
+  margin: 10px 16px;
+}
+
+
+/* =========================================================
+   11. BUTTONS
+   ========================================================= */
+.btn-soft {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: #0f172a;
+  padding: 8px 12px;
+}
+
+.btn-soft:hover {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   12. CARDS
+   ========================================================= */
+.card-soft {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.kpi-card {
+  padding: 18px;
+  height: 100%;
+}
+
+.kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.kpi-title { color: var(--muted); font-weight: 600; font-size: 13px; }
+.kpi-value { font-size: 34px; font-weight: 900; line-height: 1; }
+.kpi-sub   { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+.kpi-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--blue);
+}
+
+.icon-chip {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+.bg-primary-soft { background: rgba(37, 99, 235, 0.12); color: var(--primary); }
+.bg-success-soft { background: rgba(22, 163, 74, 0.12);  color: var(--success); }
+.bg-warning-soft { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
+.bg-danger-soft  { background: rgba(239, 68, 68, 0.12);  color: var(--danger);  }
+
+
+/* =========================================================
+   13. TABLE + BADGE
+   ========================================================= */
+.table thead th {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.badge-soft {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.badge-high { color: #b42318; background: rgba(180,35,24,.08);  border-color: rgba(180,35,24,.18); }
+.badge-med  { color: #b54708; background: rgba(181,71,8,.10);   border-color: rgba(181,71,8,.18);  }
+.badge-low  { color: #027a48; background: rgba(2,122,72,.10);   border-color: rgba(2,122,72,.18);  }
+
+.input-soft {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.pill-ok   { background: rgba(22, 163, 74, 0.12);  color: #166534; }
+.pill-low  { background: rgba(245, 158, 11, 0.16); color: #92400e; }
+.pill-crit { background: rgba(239, 68, 68, 0.14);  color: #991b1b; }
+.pill-over { background: rgba(37, 99, 235, 0.12);  color: #1d4ed8; }
+
+
+/* =========================================================
+   14. DESKTOP SIDEBAR COLLAPSE
+   ========================================================= */
+body.sb-hidden #sidebar,
+body.sb-hidden .sidebar {
+  width: var(--sidebar-collapsed-width);
+}
+
+body.sb-hidden .main {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+body.sb-hidden .hide-when-collapsed {
+  display: none !important;
+}
+
+body.sb-hidden #sidebar .nav-link,
+body.sb-hidden .sidebar .nav-link {
+  justify-content: center;
+}
+
+body.sb-hidden #sidebar .nav-link span,
+body.sb-hidden .sidebar .nav-link span {
+  display: none;
+}
+
+body.sb-hidden .brand {
+  justify-content: center;
+}
+
+
+/* =========================================================
+   15. MOBILE SIDEBAR OVERLAY
+   ========================================================= */
+.sb-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 1035;
+}
+
+@media (max-width: 992px) {
+  #sidebar,
+  .sidebar {
+    transform: translateX(-100%);
+    width: var(--sidebar-width);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  }
+
+  body.sb-open #sidebar,
+  body.sb-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  body.sb-hidden .main {
+    margin-left: 0;
+  }
+
+  body.sb-hidden #sidebar,
+  body.sb-hidden .sidebar {
+    width: var(--sidebar-width);
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .content {
+    padding: 14px;
+  }
+}

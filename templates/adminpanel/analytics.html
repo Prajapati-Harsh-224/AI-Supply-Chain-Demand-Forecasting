@@ -1,0 +1,165 @@
+{% extends "adminpanel/base_admin.html" %}
+{% block title %}Analytics • Admin{% endblock %}
+{% block page_title %}Analytics{% endblock %}
+
+{% block content %}
+
+<div class="mb-3">
+  <h3 class="fw-bold mb-0">Analytics</h3>
+  <div class="text-muted">Model performance, seasonality, and demand insights.</div>
+</div>
+
+<!-- Metrics -->
+<div class="row g-3">
+
+  <!-- MAE -->
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">MAE</div>
+        <div class="kpi-icon"><i class="bi bi-speedometer"></i></div>
+      </div>
+      <div class="kpi-value">{{ mae|default:"0.0" }}</div>
+      <div class="kpi-sub">Mean Absolute Error</div>
+    </div>
+  </div>
+
+  <!-- RMSE -->
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">RMSE</div>
+        <div class="kpi-icon" style="background:rgba(245,158,11,.10);color:#b54708;">
+          <i class="bi bi-activity"></i>
+        </div>
+      </div>
+      <div class="kpi-value">{{ rmse|default:"0.0" }}</div>
+      <div class="kpi-sub">Root Mean Squared Error</div>
+    </div>
+  </div>
+
+  <!-- MAPE -->
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">Accuracy</div>
+        <div class="kpi-icon" style="background:rgba(124,58,237,.10);color:#7c3aed;">
+          <i class="bi bi-percent"></i>
+        </div>
+      </div>
+      <div class="kpi-value">{{ accuracy }}%</div>
+<div class="kpi-sub">Forecast accuracy</div>
+    </div>
+  </div>
+
+  <!-- CONFIDENCE -->
+  <div class="col-md-3">
+    <div class="card-soft kpi-card">
+      <div class="kpi-top">
+        <div class="kpi-title">Confidence</div>
+        <div class="kpi-icon" style="background:rgba(16,185,129,.10);color:#027a48;">
+          <i class="bi bi-shield-check"></i>
+        </div>
+      </div>
+      <div class="kpi-value">{{ confidence|default:"N/A" }}</div>
+      <div class="kpi-sub">Model reliability</div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<!-- ================= MODEL SECTION ================= -->
+<div class="row g-3 mt-2">
+
+  <!-- MODEL OVERVIEW -->
+<div class="col-lg-6">
+  <div class="card-soft p-4 h-100">
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h5 class="fw-bold mb-0">AI Model Summary</h5>
+      <span class="badge-soft">Demand IQ</span>
+    </div>
+
+    <!-- Model Info -->
+    <div class="mb-2">
+      <i class="bi bi-cpu me-2 text-primary"></i>
+      <b>Model:</b> Random Forest Regressor
+    </div>
+
+    <div class="mb-2">
+      <i class="bi bi-diagram-3 me-2 text-primary"></i>
+      <b>Type:</b> Supervised Machine Learning
+    </div>
+
+    <div class="mb-3">
+      <i class="bi bi-database me-2 text-primary"></i>
+      <b>Training Data:</b>  200K+ historical sales records
+    </div>
+
+   
+
+    <!-- Capabilities -->
+    <div class="fw-semibold mb-2">Model Capabilities:</div>
+
+    <div class="small text-muted mb-3">
+      • Captures short-term demand trends<br>
+      • Handles non-linear sales patterns<br>
+      • Adapts to seasonal variations
+    </div>
+ <!-- Features -->
+    <div class="fw-semibold mb-2">Core Features:</div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <span class="badge-soft">Historical Sales</span>
+      <span class="badge-soft">Date Trends</span>
+      <span class="badge-soft">Seasonality</span>
+      <span class="badge-soft">Lag Features</span>
+    </div>
+    
+  </div>
+</div>
+
+  <!-- MODEL INSIGHTS -->
+ <div class="col-lg-6">
+  <div class="card-soft p-4 h-100">
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h5 class="fw-bold mb-0">Model Insights</h5>
+      <span class="badge-soft">Demand IQ</span>
+    </div>
+
+    <!-- Key Strengths -->
+    <div class="fw-semibold mb-2">Key Strengths:</div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <span class="badge-soft">Trend Detection</span>
+      <span class="badge-soft">Seasonality Learning</span>
+      <span class="badge-soft">Stable Predictions</span>
+    </div>
+
+    <!-- Behavioral Insights -->
+    <div class="fw-semibold mb-2">Behavioral Insights:</div>
+
+    <div class="small text-muted mb-3">
+      • Demand patterns are learned effectively from historical data<br>
+      • Model adapts well to seasonal and time-based variations<br>
+      • Consistent performance across different products
+    </div>
+
+    <!-- Feature Impact -->
+    <div class="fw-semibold mb-2">Feature Influence:</div>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <span class="badge-soft">Lag-7 Impact</span>
+      <span class="badge-soft">Rolling Avg (30d)</span>
+      <span class="badge-soft">Recent Sales Trends</span>
+    </div>
+
+  </div>
+</div>
+
+
+
+{% endblock %}

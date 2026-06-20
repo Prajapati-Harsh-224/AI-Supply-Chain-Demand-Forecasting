@@ -1,0 +1,97 @@
+{% extends "adminpanel/base_admin.html" %}
+{% block title %}Stores • Admin{% endblock %}
+{% block page_title %}Stores{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h3 class="fw-bold mb-0">Stores</h3>
+    <div class="text-muted"><div class="text-muted">
+  Overview of store performance, inventory efficiency, and stock health.
+</div>
+</div>
+  </div>
+</div>
+
+<div class="card-soft p-3">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Store ID</th>
+          <th>Store Name</th>
+          <th>Owner</th>
+          <th>Location</th>
+          <th>Total Products</th>
+          <th>Inventory Health</th>
+        </tr>
+      </thead>
+
+      
+      <tbody id="storeTable">
+        <tr>
+          <td colspan="6" class="text-center">Loading...</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+</div>
+
+<!-- Store details modal  -->
+<div class="modal fade" id="storeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Store Analytics</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="text-muted">Future analytics content here</div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary input-soft" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/adminpanel/stores/api/")
+        .then(response => response.json())
+        .then(data => {
+            const table = document.getElementById("storeTable");
+            table.innerHTML = "";
+
+            data.stores.forEach(store => {
+
+                const row = `
+                    <tr>
+                        <td class="fw-semibold">${store.id}</td>
+                        <td>${store.name}</td>
+                        <td class="text-muted">${store.owner}</td>
+                        <td class="text-muted">${store.location}</td>
+                        <td>${store.total_products}</td>
+                        <td>
+                            <span class="badge bg-light text-dark border">
+                                ${store.inventory_health}%
+                            </span>
+                        </td>
+                    </tr>
+                `;
+
+                table.innerHTML += row;
+            });
+        })
+        .catch(error => {
+            document.getElementById("storeTable").innerHTML =
+                "<tr><td colspan='6' class='text-danger text-center'>Error loading data</td></tr>";
+        });
+});
+</script>
+
+{% endblock %}

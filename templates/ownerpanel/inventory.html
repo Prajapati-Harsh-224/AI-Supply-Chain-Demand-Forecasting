@@ -1,0 +1,104 @@
+{% extends "ownerpanel/base_owner.html" %}
+{% block title %}Inventory • Owner{% endblock %}
+{% block page_title %}Inventory{% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-3">
+  <div>
+    <h3 class="fw-bold mb-0">Inventory Status</h3>
+  </div>
+
+  <form class="d-flex gap-2" method="get">
+    <input class="form-control" name="q" value="{{ q }}" placeholder="Search product...">
+
+    <select class="form-select" name="status">
+      <option value="">All</option>
+      <option value="OK" {% if status == "OK" %}selected{% endif %}>Healthy</option>
+      <option value="LOW" {% if status == "LOW" %}selected{% endif %}>Low</option>
+      <option value="OVER" {% if status == "OVER" %}selected{% endif %}>Overstock</option>
+    </select>
+
+    <button class="btn btn-primary btn-pill" type="submit">Filter</button>
+  </form>
+</div>
+
+<!-- Health Card -->
+<div class="card-soft p-4 mb-4">
+  <div class="fw-bold mb-3">Inventory Health</div>
+
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div class="display-6 fw-bold text-primary">
+      {{ health_score }}%
+    </div>
+  </div>
+
+  <div class="d-flex gap-3 flex-wrap small">
+    <span class="badge bg-success-subtle text-success">
+      {{ healthy_count }} Healthy
+    </span>
+    <span class="badge bg-warning-subtle text-warning">
+      {{ low_count }} Low
+    </span>
+    <span class="badge bg-secondary-subtle text-secondary">
+      {{ over_count }} Overstock
+    </span>
+  </div>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+  <div class="card-soft p-0 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            
+            <th>SKU</th>
+            <th>Product</th>
+            <th>current_stock</th>
+            <th>Reorder</th>
+            <th>Safety</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for x in items %}
+          <tr>
+            
+
+            <td class="fw-semibold">{{ x.product_sku }}</td>
+            <td>{{ x.product_name }}</td>
+            <td>{{ x.current_stock|floatformat:0 }}</td>
+            <td>{{ x.reorder_point|floatformat:0 }}</td>
+            <td>{{ x.safety_stock|floatformat:0 }}</td>
+
+            <td>
+              {% if x.status == "OK" %}
+                <span class="pill pill-ok">Healthy</span>
+              {% elif x.status == "LOW" %}
+                <span class="pill pill-low">Low Stock</span>
+              {% elif x.status == "OVER" %}
+                <span class="pill pill-over">Overstock</span>
+              {% else %}
+                <span class="pill pill-muted">Unknown</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-muted text-center py-5">
+              <div class="fw-semibold mb-1">No inventory items found</div>
+              <div class="small">Upload your inventory CSV to see stock status.</div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+
+</form>
+
+{% endblock %}

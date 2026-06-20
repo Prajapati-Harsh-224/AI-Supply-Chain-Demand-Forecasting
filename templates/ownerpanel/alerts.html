@@ -1,0 +1,252 @@
+{% extends "ownerpanel/base_owner.html" %}
+{% block title %}Alerts • Owner{% endblock %}
+{% block page_title %}Alerts{% endblock %}
+
+{% block content %}
+<style>
+  .summary-card{
+    border:1px solid rgba(15,23,42,.08);
+    border-radius:20px;
+    padding:20px;
+    background:#fff;
+    position:relative;
+    overflow:hidden;
+    min-height:140px;
+  }
+  .summary-title{
+    color:#64748b;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-weight:700;
+  }
+  .summary-val{
+    font-size:42px;
+    font-weight:800;
+    line-height:1.1;
+    margin-top:8px;
+  }
+  .summary-sub{
+    color:#64748b;
+    font-size:15px;
+    margin-top:8px;
+  }
+
+  .summary-primary::after,
+  .summary-warning::after,
+  .summary-info::after{
+    content:"";
+    position:absolute;
+    right:-18px;
+    bottom:-18px;
+    width:92px;
+    height:92px;
+    border-radius:50%;
+    opacity:.18;
+  }
+  .summary-primary::after{ background:#2563eb; }
+  .summary-warning::after{ background:#f59e0b; }
+  .summary-info::after{ background:#06b6d4; }
+
+  .summary-primary .summary-val{ color:#2563eb; }
+  .summary-warning .summary-val{ color:#d97706; }
+  .summary-info .summary-val{ color:#0891b2; }
+
+  .filter-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 18px;
+    border-radius:999px;
+    border:1px solid rgba(15,23,42,.10);
+    background:#fff;
+    color:#0f172a;
+    text-decoration:none;
+    font-weight:700;
+  }
+  .filter-btn.active{
+    background:#2563eb;
+    color:#fff;
+    border-color:#2563eb;
+  }
+
+  .alert-card{
+    border:1px solid rgba(15,23,42,.08);
+    border-radius:22px;
+    background:#fff;
+    padding:22px;
+    margin-bottom:18px;
+  }
+
+  .alert-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:700;
+    margin-right:8px;
+  }
+  .badge-resolved{
+    background:rgba(22,163,74,.12);
+    color:#16a34a;
+  }
+  .badge-warning{
+    background:rgba(245,158,11,.14);
+    color:#b45309;
+  }
+  .badge-info{
+    background:rgba(6,182,212,.12);
+    color:#0891b2;
+  }
+
+  .alert-title{
+    font-size:20px;
+    font-weight:800;
+    color:#0f172a;
+    margin-top:14px;
+    margin-bottom:8px;
+  }
+
+  .alert-desc{
+    color:#475569;
+    font-size:16px;
+    margin:0;
+  }
+
+  .alert-time{
+    color:#64748b;
+    font-size:14px;
+  }
+
+  .empty-state{
+    border-radius:20px;
+    border:1px dashed rgba(15,23,42,.16);
+    background:#fff;
+    padding:36px;
+    text-align:center;
+  }
+</style>
+
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+  <div>
+    <h3 class="fw-bold mb-1">Alerts</h3>
+    <div class="text-muted">Real-time inventory monitoring with automated alerts for optimal stock management</div>
+  </div>
+
+  <form method="get" class="d-flex gap-2 flex-wrap flex-md-nowrap">
+    <input type="hidden" name="tab" value="{{ tab }}">
+    <select class="form-select" name="sort" style="min-width:180px;">
+      <option value="new" {% if sort == "new" %}selected{% endif %}>Newest first</option>
+      <option value="old" {% if sort == "old" %}selected{% endif %}>Oldest first</option>
+    </select>
+    <button class="btn btn-primary btn-pill" type="submit">Apply</button>
+  </form>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="summary-card summary-primary">
+      <div class="summary-title">Total Alerts</div>
+      <div class="summary-val">{{ total_count }}</div>
+      <div class="summary-sub">Total created in system</div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="summary-card summary-warning">
+      <div class="summary-title">Low Stock Alerts</div>
+      <div class="summary-val">{{ low_count }}</div>
+      <div class="summary-sub">Needs immediate action</div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="summary-card summary-info">
+      <div class="summary-title">Overstock Alerts</div>
+      <div class="summary-val">{{ overstock_count }}</div>
+      <div class="summary-sub">Excess inventory detected</div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+  <div class="d-flex flex-wrap gap-2">
+    <a href="?tab=all&sort={{ sort }}" class="filter-btn {% if tab == 'all' %}active{% endif %}">All</a>
+    <a href="?tab=low&sort={{ sort }}" class="filter-btn {% if tab == 'low' %}active{% endif %}">Low</a>
+    <a href="?tab=overstock&sort={{ sort }}" class="filter-btn {% if tab == 'overstock' %}active{% endif %}">Overstock</a>
+  </div>
+
+  <div class="text-muted">Showing {{ alerts|length }} alerts</div>
+</div>
+
+{% for a in alerts %}
+  <div class="alert-card">
+    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+      <div style="flex:1; min-width:260px;">
+        
+
+        {% if a.alert_type == "LOW_STOCK" %}
+          <span class="alert-badge badge-warning">Warning</span>
+        {% elif a.alert_type == "OVERSTOCK" %}
+          <span class="alert-badge badge-info">Info</span>
+        {% endif %}
+
+        <div class="alert-title">
+          {% if a.alert_type == "LOW_STOCK" %}
+            Low Stock - {{ a.product_name }}
+          {% elif a.alert_type == "OVERSTOCK" %}
+            Overstock - {{ a.product_name }}
+          {% else %}
+            {{ a.title }}
+          {% endif %}
+        </div>
+
+        <p class="alert-desc">
+          {% if a.alert_type == "LOW_STOCK" %}
+            {{ a.product_name }} ({{ a.product_sku }}) is below reorder level. Current stock: {{ a.current_stock }}
+          {% elif a.alert_type == "OVERSTOCK" %}
+            {{ a.product_name }} ({{ a.product_sku }}) has excess inventory. Current stock: {{ a.current_stock }}
+          {% else %}
+            {{ a.message }}
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="text-end" style="min-width:220px;">
+        <div class="fw-bold">{{ a.created_at|timesince }} ago</div>
+        <div class="alert-time mt-1">{{ a.created_at|date:"M j, Y • g:i A" }}</div>
+
+       <div class="mt-3">
+  {% if not a.is_resolved %}
+    <form method="POST" action="{% url 'ownerpanel:resolve_alert' a.id %}">
+      {% csrf_token %}
+      <button type="submit" style="
+        background:#16a34a;
+        color:white;
+        border:none;
+        padding:8px 14px;
+        border-radius:8px;
+        font-weight:600;
+        cursor:pointer;
+      ">
+        Resolve
+      </button>
+    </form>
+  {% else %}
+    <span class="alert-badge badge-resolved">Resolved</span>
+  {% endif %}
+</div>
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <div class="empty-state">
+    
+    <div class="fw-bold mt-2">All Clear</div>
+    <div class="text-muted mt-2">All products are within optimal inventory thresholds. No immediate action needed.</div>
+  </div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Login | DemandIQ{% endblock %}
+
+{% block content %}
+<section class="auth-wrap py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-9 col-lg-5">
+
+        <div class="card auth-card border-0 rounded-4">
+          <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="brand-badge">DI</div>
+              <div>
+                <h1 class="h4 fw-bold mb-0">Welcome back</h1>
+                <div class="text-muted small">Login to continue to DemandIQ.</div>
+              </div>
+            </div>
+
+            <form method="post" novalidate>
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Username</label>
+                <input type="text" name="username" class="form-control form-control-lg"
+                       placeholder="e.g. harshprajapati" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Password</label>
+                <input type="password" name="password" class="form-control form-control-lg"
+                       placeholder="Enter your password" required>
+              </div>
+
+              <button type="submit" class="btn btn-gradient btn-lg w-100 fw-semibold">
+                Log in
+              </button>
+
+              <div class="text-center text-muted small mt-3">
+                Don’t have an account?
+                <a class="fw-semibold" href="{% url 'register' %}">Create one</a>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

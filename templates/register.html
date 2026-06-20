@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Register | DemandIQ{% endblock %}
+
+{% block content %}
+<section class="auth-wrap py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-6">
+
+        <div class="card auth-card border-0 rounded-4">
+          <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="brand-badge">DI</div>
+              <div>
+                <h1 class="h4 fw-bold mb-0">Create your account</h1>
+                <div class="text-muted small">
+                  Add basic details to personalize forecasting insights.
+                </div>
+              </div>
+            </div>
+
+            {% if form.errors %}
+              <div class="alert alert-warning">
+                Please fix the highlighted fields and try again.
+              </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+              {% csrf_token %}
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Full Name</label>
+                  {{ form.full_name }}
+                  {% if form.full_name.errors %}
+                    <div class="text-danger small">{{ form.full_name.errors|striptags }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Email</label>
+                  {{ form.email }}
+                  {% if form.email.errors %}
+                    <div class="text-danger small">{{ form.email.errors|striptags }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Phone Number</label>
+                  {{ form.phone }}
+                  {% if form.phone.errors %}
+                    <div class="text-danger small">{{ form.phone.errors|striptags }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Company Name</label>
+                  {{ form.company_name }}
+                  {% if form.company_name.errors %}
+                    <div class="text-danger small">{{ form.company_name.errors|striptags }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-6">
+  <label class="form-label fw-semibold">Store Location</label>
+  {{ form.location }}
+  {% if form.location.errors %}
+    <div class="text-danger small">
+      {{ form.location.errors|striptags }}
+    </div>
+  {% endif %}
+</div>
+
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Username</label>
+                  {{ form.username }}
+                  {% if form.username.errors %}
+                    <div class="text-danger small">{{ form.username.errors|striptags }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Password</label>
+                  {{ form.password1 }}
+                  {% if form.password1.errors %}
+                    <div class="text-danger small">{{ form.password1.errors|striptags }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Confirm Password</label>
+                  {{ form.password2 }}
+                  {% if form.password2.errors %}
+                    <div class="text-danger small">{{ form.password2.errors|striptags }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-gradient btn-lg w-100 fw-semibold mt-4">
+                Create account
+              </button>
+
+              <div class="text-center text-muted small mt-3">
+                Already have an account?
+                <a class="fw-semibold" href="{% url 'login' %}">Log in</a>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
